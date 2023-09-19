@@ -15,6 +15,7 @@
     - "xz"
     - "xz-devel"
     - "libffi-devel"
+    - "git"
   when: ansible_pkg_mgr == 'yum'
 
 - name: install pyenv dependencies, apt package manager
@@ -38,6 +39,7 @@
     - "libffi-dev"
     - "liblzma-dev"
     - "python-openssl"
+    - "git"
   when: ansible_pkg_mgr == 'apt'
 
 - name: add pyenv install to runonce config
