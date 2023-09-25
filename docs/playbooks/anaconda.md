@@ -1,5 +1,7 @@
-# Playbook anaconda
-[back to index](../index.md#Playbooks)
+---
+title: Anaconda
+roles: ['anaconda']
+---
 
 ## Summary
 This playbook installs Anaconda Navigator for data science development purposes.

@@ -1,11 +1,13 @@
-# Role anaconda
-[back to index](../index.md#Roles)
+---
+title: anaconda
+platforms: ['ubuntu', 'centos']
+---
 
 ## Summary
 Role that installs Anaconda, a distribution of Python and R for Data Science. See the [Anaconda website](https://www.anaconda.com/) for more details.
 
 ## Requires
-Debain or RHEL/CentOS.
+Debian or RHEL/CentOS.
 
 ## Description
 The role follows the installation as explained on their official website. It installs any required dependencies and then Anaconda itself. The installation is done in a shared location and each user on the system is granted access rights to all necessary files.
