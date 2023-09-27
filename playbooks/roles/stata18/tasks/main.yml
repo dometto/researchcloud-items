@@ -7,30 +7,30 @@
 #
 #
 
-- name: install curses libraries to support commandline invocation of Stata
-  package:
-    name: "libncurses5"
+- name: Install curses libraries to support commandline invocation of Stata
+  ansible.builtin.package:
+    name: libncurses5
     state: present
 
-- name: create a tmp dir to unpack Stata software to
-  file:
+- name: Create a tmp dir to unpack Stata software to
+  ansible.builtin.file:
     dest: "{{ stata18_tmp_dir }}"
     state: directory
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
 
-- name: download and unpack Stata18 distribution tar.gz
-  unarchive:
+- name: Download and unpack Stata18 distribution tar.gz
+  ansible.builtin.unarchive:
     src: "{{ stata18_tar_dir }}/{{ stata18_tar_file }}"
-    remote_src: yes
+    remote_src: true
     dest: "{{ stata18_tmp_dir }}"
 
-- name: create stata software target dir
-  file:
+- name: Create stata software target dir
+  ansible.builtin.file:
     dest: "{{ stata18_dir }}"
     state: directory
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
 
@@ -41,91 +41,75 @@
 #
 
 # Note that we rename from X.tza to X.tar.gz to facilitate later extraction
-- name: copy compressed stata files to target dir while renaming to .tar.gz
-  copy:
+- name: Copy compressed stata files to target dir while renaming to .tar.gz
+  ansible.builtin.copy:
     src: "{{ stata18_tmp_dir }}/unix/linux64/{{ item }}.taz"
-    remote_src: yes
+    remote_src: true
     dest: "{{ stata18_dir }}/{{ item }}.tar.gz"
     owner: root
-    mode: 0640
+    mode: "0640"
   with_items:
-    - "ado"
-    - "base"
-    - "bins"
-    - "docs"
+    - ado
+    - base
+    - bins
+    - docs
 #  - "statalib"   yet this item is not included 
 
-- name: copy file setrwxp to target dir
-  copy:
+- name: Copy file setrwxp to target dir
+  ansible.builtin.copy:
     src: "{{ stata18_tmp_dir }}/unix/linux64/setrwxp"
-    remote_src: yes
+    remote_src: true
     dest: "{{ stata18_dir }}/setrwxp"
     owner: root
-    mode: 0750
+    mode: "0750"
 
-- name: extract compressed stata files in place in target dir
-  unarchive: 
+- name: Extract compressed stata files in place in target dir
+  ansible.builtin.unarchive:
     src: "{{ stata18_dir }}/{{ item }}.tar.gz"
-    remote_src: yes
-    dest: "{{ stata18_dir}}"
+    remote_src: true
+    dest: "{{ stata18_dir }}"
     owner: root
   with_items:
-    - "ado"
-    - "base"
-    - "bins"
-    - "docs"
+    - ado
+    - base
+    - bins
+    - docs
 
-- name: clean up tar.gz files
-  file: 
-    path: "{{ stata18_dir }}/{{ item }}.tar.gz" 
+- name: Clean up tar.gz files
+  ansible.builtin.file:
+    path: "{{ stata18_dir }}/{{ item }}.tar.gz"
     state: absent
   with_items:
-    - "ado"
-    - "base"
-    - "bins"
-    - "docs"
-   
-- name: run Stata setrwxp to set access rights for Stata files
-  shell: "./setrwxp now"
+    - ado
+    - base
+    - bins
+    - docs
+
+- name: Run Stata setrwxp to set access rights for Stata files
+  ansible.builtin.command: ./setrwxp now
   args:
     chdir: "{{ stata18_dir }}"
-  
-- name: create Stata markfile to indicate presence of installed Stata
-  shell: "echo `date`>installed.180"
+
+- name: Create Stata markfile to indicate presence of installed Stata
+  ansible.builtin.shell: echo `date`>installed.180
   args:
     chdir: "{{ stata18_dir }}"
 
 # NB: the license response file will fail if the corresponding Ansible vars have not been defined!
 #  We suggest to specify them as CO secrets
 #  see jinja script for variable names
-- name: create response file for license initiator
-  template:
+- name: Create response file for license initiator
+  ansible.builtin.template:
     owner: root
     group: root
-    mode: 0755
-    src: "stata_input_for_stinit.j2"
+    mode: "0755"
+    src: stata_input_for_stinit.j2
     dest: "{{ stata18_dir }}/stinit_responses.txt"
 
-- name: activate license
-  shell: "./stinit <stinit_responses.txt"
+- name: Activate license
+  ansible.builtin.shell: ./stinit <stinit_responses.txt
   args:
     chdir: "{{ stata18_dir }}"
 
-
-- name: install desktop launcher
-  include: desktop.yml
-
-#- name: create symlink to matlab executable for bash access
-#  file:
-#    dest: /usr/local/bin/matlab
-#    src: "{{ matlab_dir }}/{{ matlab_version }}/bin/matlab"
-#    state: link
- 
-# commandline wrapper will try per-user license before network license
-#- name: create commandline wrapper to matlab executable
-#  template:
-#    owner: root
-#    group: root
-#    mode: 0755
-#    src: "matlab.j2"
-#    dest: /usr/local/bin/matlab
+- name: Install desktop launcher
+  ansible.builtin._include: desktop.yml

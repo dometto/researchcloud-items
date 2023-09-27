@@ -1,11 +1,10 @@
 ---
-- name: install docker
-  package:
+- name: Install docker
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   with_items:
-    - "docker.io"
-    - "docker-compose"
+    - docker.io
+    - docker-compose
   notify:
     - start docker deamon
-...

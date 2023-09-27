@@ -3,19 +3,19 @@
 # nginx (plugin) already installed and configured using SURF config parameters
 # 
 #
-- name: ensure uwsgi service is installed
-  package:
+- name: Ensure uwsgi service is installed
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   with_items:
-    - "uwsgi"
-    - "uwsgi-plugin-python3"
+    - uwsgi
+    - uwsgi-plugin-python3
 
-- name: configure uwsgi within nginx for locations starting with '/w'
-  copy:
-    src: "nginx-uwsgi.conf"
-    dest: "/etc/nginx/app-location-conf.d/uwsgi.conf"
-    mode: 0644
+- name: Configure uwsgi within nginx for locations starting with '/w'
+  ansible.builtin.copy:
+    src: nginx-uwsgi.conf
+    dest: /etc/nginx/app-location-conf.d/uwsgi.conf
+    mode: "0644"
   notify: Restart nginx
 
 # - name: copy example uwsgi.ini file to /etc/uwsgi/apps-available
@@ -24,9 +24,8 @@
 #    dest: "/etc/uwsgi/apps-available/example.ini"
 #    mode: 0644    
 
-
-- name: start uwsgi service at boot
-  service:
+- name: Start uwsgi service at boot
+  ansible.builtin.service:
     name: uwsgi
     state: started
-    enabled: yes
+    enabled: true

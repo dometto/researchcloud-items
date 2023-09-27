@@ -1,7 +1,5 @@
 ---
-
-- name: install icommands
-  package:
+- name: Install icommands
+  ansible.builtin.package:
     name: irods-icommands
     state: present
-

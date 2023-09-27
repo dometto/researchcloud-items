@@ -1,24 +1,22 @@
 ---
-
-- name: pip install python-irodsclient
-  pip:
+- name: Pip install python-irodsclient
+  ansible.builtin.pip:
     name: python-irodsclient
     executable: pip3
 
-- name: create target directory for myrods-sync files
-  file:
+- name: Create target directory for myrods-sync files
+  ansible.builtin.file:
     dest: "{{ myrodssync_dir }}"
     state: directory
-    mode: 0755
+    mode: "0755"
     owner: root
     group: root
 
-- name: checkout myrods-sync repository
-  git:
+- name: Checkout myrods-sync repository
+  ansible.builtin.git:
     repo: "{{ myrodssync_git }}"
     dest: "{{ myrodssync_dir }}"
     version: main
 
-
-- name: install desktop launcher for myrods-sync
-  include: desktop.yml
+- name: Install desktop launcher for myrods-sync
+  ansible.builtin._include: desktop.yml

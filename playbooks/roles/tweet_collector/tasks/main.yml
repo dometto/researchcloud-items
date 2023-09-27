@@ -1,38 +1,36 @@
 ---
 - name: Checkout tweet collector repository.
-  git:
+  ansible.builtin.git:
     repo: https://github.com/SytseGroenwold/tweet_collector.git
     dest: /opt/tweet_collector
     version: refactors
-  
+
 - name: Change permission of tweet_collector folder
-  file:
+  ansible.builtin.file:
     path: /opt/tweet_collector
-    mode: 0777
-    recurse: yes
+    mode: "0777"
+    recurse: true
 
 - name: Ensure virtualenvwhich is installed
-  pip:
+  ansible.builtin.pip:
     name: virtualenv
     state: present
 
 - name: Create virtualenv to install tweet_collector into.
-  command: virtualenv /opt/venvs/tweet_collector
-
+  ansible.builtin.command: virtualenv /opt/venvs/tweet_collector
 - name: Build tweet_collector to install through pip later
-  shell:
+  ansible.builtin.command:
     cmd: /opt/poetry/bin/poetry build
     chdir: /opt/tweet_collector
 
 - name: Install tweet_collector through pip
-  pip:
+  ansible.builtin.pip:
     name: "{{ query('fileglob', '/opt/tweet_collector/dist/tweet_collector*.whl') }}"
     virtualenv: /opt/venvs/tweet_collector
     virtualenv_command: virtualenv
 
 - name: Create function that launches virtualenv before launching tweet_collector
-  copy:
+  ansible.builtin.copy:
     src: set_tweetcollector_alias
     dest: /etc/runonce.d
-    mode: 0755
-...
+    mode: "0755"

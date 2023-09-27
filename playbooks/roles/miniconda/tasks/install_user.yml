@@ -1,10 +1,9 @@
 ---
 - name: Overwrite conda installation dir
-  set_fact:
+  ansible.builtin.set_fact:
     miniconda_install_dir: "{{ item.home }}/miniconda"
 
 - name: Install conda for each user individually
-  shell: "{{ miniconda_download_dest }}/miniconda.sh -b -p {{ miniconda_install_dir }}"
+  ansible.builtin.command: "{{ miniconda_download_dest }}/miniconda.sh -b -p {{ miniconda_install_dir }}"
   become: false
   become_user: "{{ item.user }}"
-...

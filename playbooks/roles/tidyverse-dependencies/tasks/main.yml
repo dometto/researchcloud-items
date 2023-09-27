@@ -1,12 +1,11 @@
 ---
 - name: Install dependencies
-  apt:
+  ansible.builtin.apt:
     pkg:
-    - libxml2-dev
-    - libfreetype6-dev
-    - libpng-dev
-    - libtiff5-dev 
-    - libjpeg-dev
-    - libcurl4-openssl-dev
+      - libxml2-dev
+      - libfreetype6-dev
+      - libpng-dev
+      - libtiff5-dev
+      - libjpeg-dev
+      - libcurl4-openssl-dev
     state: present
-...
