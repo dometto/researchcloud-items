@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Testing role user_webdav_mount
+      ansible.builtin.include_role:
+        name: user_webdav_mount
+      # vars:
