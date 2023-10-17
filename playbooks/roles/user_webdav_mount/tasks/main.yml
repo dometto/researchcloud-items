@@ -1,0 +1,49 @@
+---
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - davfs2
+    - expect
+    - zenity
+
+- name: Set soft link for mount.davfs
+  file:
+    src:  /usr/sbin/mount.davfs
+    dest: /sbin/mount.davfs
+    state: link
+  failed_when: false
+
+- name: Set SUID for davfs (allow users to mount)
+  file:
+    path: /sbin/mount.davfs
+    mode: u+s
+
+- name: Copy mount script
+  ansible.builtin.copy:
+    src: guiuser_mount_webdav.sh
+    dest: /usr/local/bin/guiuser_mount_webdav.sh
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Create custom davfs2 config file
+  ansible.builtin.file:
+    path: /etc/davfs2/guiuser.conf
+    owner: root
+    group: root
+    mode: "0744"
+    state: touch
+
+- name: Ensure davfs uses locks
+  ansible.builtin.lineinfile:
+    path: /etc/davfs2/guiuser.conf
+    line: use_locks 0
+    state: present
+
+- name: Always prompt for credentials
+  ansible.builtin.lineinfile:
+    path: /etc/davfs2/guiuser.conf
+    line: ask_auth 1
+    state: present

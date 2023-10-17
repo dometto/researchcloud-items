@@ -1,0 +1,7 @@
+---
+- name: Allow users to mount Yoda data through WebDAV 
+  hosts: all
+  gather_facts: true
+
+  roles:
+    - user_webdav_mount
