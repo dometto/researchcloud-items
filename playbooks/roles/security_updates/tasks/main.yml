@@ -21,12 +21,30 @@
     when: "'molecule-notest' in ansible_skip_tags"
   when: security_updates_firstrun == true
 
-- name: Enable unattended upgrades
-  command: "{{ item }}"
-  tags: molecule-notest # systemctl not active on test container
-  with_items:
-    - systemctl enable apt-daily.timer
-    - systemctl enable apt-daily-upgrade.timer
-    - systemctl start apt-daily.timer
-    - systemctl start apt-daily-upgrade.timer
+- name: Enable periodic updates
+  block:
+    - name: Install bootstrap script
+      copy:
+        src: start_upgrade_timers.sh
+        dest: /usr/local/bin/start_upgrade_timers.sh
+        owner: root
+        mode: 0740
+
+    - name: Install bootstrapping service definition
+      copy:
+        src: upgrade-timer-bootstrap.service
+        dest: /etc/systemd/system/upgrade-timer-bootstrap.service
+        owner: root
+        mode: 0740
+
+    - name: Install bootstrapping timer definition
+      template:
+        src: upgrade-timer-bootstrap.timer
+        dest: /etc/systemd/system/upgrade-timer-bootstrap.timer
+
+    - name: Enable bootstrap timer
+      command: "{{ item }}"
+      with_items:
+        - systemctl enable upgrade-timer-bootstrap.timer
+        - systemctl start upgrade-timer-bootstrap.timer
   when: security_updates_periodic == true
