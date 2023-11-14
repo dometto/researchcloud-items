@@ -29,7 +29,6 @@ provisioner:
     converge: ../default/converge.yml
     prepare: ../default/prepare.yml
   env:
-    PROJECT_DIR: ${PROJECT_DIR:-"../../"}
     PLAYBOOK_DIR: ${PLAYBOOK_DIR:-"../../playbooks/"}
     ANSIBLE_VERBOSITY: ${ANSIBLE_VERBOSITY:-"2"}
     ANSIBLE_ROLES_PATH: ${ANSIBLE_ROLES_PATH:-'../../playbooks/roles'}
