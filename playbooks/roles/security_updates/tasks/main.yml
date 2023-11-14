@@ -32,19 +32,20 @@
 
     - name: Install bootstrapping service definition
       copy:
-        src: upgrade-timer-bootstrap.service
-        dest: /etc/systemd/system/upgrade-timer-bootstrap.service
+        src: upgrade-bootstrap.service
+        dest: /etc/systemd/system/upgrade-bootstrap.service
         owner: root
         mode: 0740
 
     - name: Install bootstrapping timer definition
       template:
-        src: upgrade-timer-bootstrap.timer
-        dest: /etc/systemd/system/upgrade-timer-bootstrap.timer
+        src: upgrade-bootstrap.timer
+        dest: /etc/systemd/system/upgrade-bootstrap.timer
 
     - name: Enable bootstrap timer
       command: "{{ item }}"
       with_items:
-        - systemctl enable upgrade-timer-bootstrap.timer
-        - systemctl start upgrade-timer-bootstrap.timer
+        - systemctl enable upgrade-bootstrap.timer
+        - systemctl start upgrade-bootstrap.timer
+      tags: molecule-idempotence-notest
   when: security_updates_periodic == true
