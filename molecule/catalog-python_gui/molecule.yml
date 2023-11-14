@@ -14,6 +14,7 @@ platforms:
   - name: workspace-src-ubuntu_focal-desktop
     image: ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_focal-desktop
     command: /sbin/init
+    privileged: true
     pre_build_image: true
     published_ports:
       - 3389/tcp
