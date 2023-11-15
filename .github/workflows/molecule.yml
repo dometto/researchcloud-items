@@ -60,6 +60,7 @@ jobs:
       DOCKER_USER: ${{ github.actor }}
       DOCKER_PW: ${{ secrets.GITHUB_TOKEN }}
       DOCKER_REGISTRY: ghcr.io
+      USER: root
     strategy:
       fail-fast: false
       matrix:
@@ -80,7 +81,8 @@ jobs:
           fi
       - name: Try manually pulling podman image
         run: |
-          podman pull docker.io/ubuntu:focal
+          podman pull quay.io/podman/hello 
+          podman run quay.io/podman/hello 
       - name: Molecule tests for playbooks
         uses: gofrolist/molecule-action@v2
         if: ${{ steps.check_scenario_exists.outputs.exitcode == 'true' }}
@@ -99,6 +101,7 @@ jobs:
       DOCKER_USER: ${{ github.actor }}
       DOCKER_PW: ${{ secrets.GITHUB_TOKEN }}
       DOCKER_REGISTRY: ghcr.io
+      USER: root
     strategy:
       fail-fast: false
       matrix:
