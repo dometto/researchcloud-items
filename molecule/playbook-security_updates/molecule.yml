@@ -13,7 +13,6 @@ driver:
 platforms:
   - name: workspace-src-ubuntu_focal
     image: ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_focal
-    privileged: true
     command: /sbin/init
     pre_build_image: true
     # Include &ci (ensures the image is pulled from the repository) if CI env variable is set
