@@ -32,6 +32,6 @@ jobs:
           podman build --format=docker -t podmantest .
           podman run -d -p 8080:80 podmantest /sbin/init
           podman ps --all
-          podman pull ghcr.io/utrechtuniversity/src-test-workspace:ubuntu
-          podman run -d ghcr.io/utrechtuniversity/src-test-workspace:ubuntu /sbin/init
+          podman pull ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_focal
+          podman run -d ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_focal /sbin/init
           podman ps --all
