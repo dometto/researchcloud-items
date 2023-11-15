@@ -82,7 +82,7 @@ jobs:
       - name: Try manually pulling podman image
         run: |
           podman pull quay.io/podman/hello 
-          podman run -d --systemd=always quay.io/podman/hello 
+          podman run -d --network=host --systemd=always quay.io/podman/hello 
       - name: Molecule tests for playbooks
         uses: gofrolist/molecule-action@v2
         if: ${{ steps.check_scenario_exists.outputs.exitcode == 'true' }}
