@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: Try manually pulling podman image
         run: |
-          echo "USER: $USER"
-          ls -l /var/lib/containers
+          echo "USER: `whoami`"
+          ls -l /var/lib/
           echo <<EOF
           FROM registry.access.redhat.com/ubi8/ubi-init
           RUN yum -y install httpd; yum clean all; systemctl enable httpd;
