@@ -60,7 +60,6 @@ jobs:
       DOCKER_USER: ${{ github.actor }}
       DOCKER_PW: ${{ secrets.GITHUB_TOKEN }}
       DOCKER_REGISTRY: ghcr.io
-      USER: root # Needed for molecule podman plugin's getent command until molecule-plugins v>23.5.0 is released
     strategy:
       fail-fast: false
       matrix:
@@ -79,6 +78,9 @@ jobs:
           else
             echo "exitcode=false" >> $GITHUB_OUTPUT
           fi
+      - name: Try manually pulling podman image
+        run: |
+          podman pull ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_focal
       - name: Molecule tests for playbooks
         uses: gofrolist/molecule-action@v2
         if: ${{ steps.check_scenario_exists.outputs.exitcode == 'true' }}
