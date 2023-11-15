@@ -1,0 +1,22 @@
+---
+name: Podman
+on:
+  push:
+  pull_request:
+
+jobs:
+  podman:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Try manually pulling podman image
+        run: |
+          echo <<EOF
+          FROM registry.access.redhat.com/ubi8/ubi-init
+          RUN yum -y install httpd; yum clean all; systemctl enable httpd;
+          RUN echo "Successful Web Server Test" > /var/www/html/index.html
+          RUN mkdir /etc/systemd/system/httpd.service.d/; echo -e '[Service]\nRestart=always' > /etc/systemd/system/httpd.service.d/httpd.conf
+          EXPOSE 80
+          CMD [ "/sbin/init" ]
+          EOF >> Containerfile
+          podman build --format=docker -t podmantest .
+          podman run -d --network=host -p 80:80 podmantest
