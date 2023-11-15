@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Try manually pulling podman image
         run: |
+          set +e
+          getent passwd runner
           echo "USER: `whoami`"
           sudo ls -l /var/lib/containers
           echo <<EOF
