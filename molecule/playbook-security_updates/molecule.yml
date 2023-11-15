@@ -14,6 +14,7 @@ platforms:
   - name: workspace-src-ubuntu_focal
     image: ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_focal
     command: /sbin/init
+    network: host
     pre_build_image: true
     # Include &ci (ensures the image is pulled from the repository) if CI env variable is set
     # Otherwise include &local (ensures the image is not pulled).
