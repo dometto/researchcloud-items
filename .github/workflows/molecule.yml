@@ -81,9 +81,7 @@ jobs:
           fi
       - name: Try manually pulling podman image
         run: |
-          ls -l /var/lib/containers/storage/
-          podman pull quay.io/podman/hello 
-          podman run -d --network=host --systemd=always quay.io/podman/hello
+          setsebool -P container_manage_cgroup 1
       - name: Molecule tests for playbooks
         uses: gofrolist/molecule-action@v2
         if: ${{ steps.check_scenario_exists.outputs.exitcode == 'true' }}
