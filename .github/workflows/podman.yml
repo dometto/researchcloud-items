@@ -8,6 +8,12 @@ jobs:
   podman:
     runs-on: ubuntu-latest
     steps:
+      - name: Log in to ghcr.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
       - name: Try manually pulling podman image
         run: |
           set +e
@@ -25,4 +31,7 @@ jobs:
           EOF
           podman build --format=docker -t podmantest .
           podman run -d -p 8080:80 podmantest /sbin/init
+          podman ps --all
+          podman pull ghcr.io/utrechtuniversity/src-test-workspace:ubuntu
+          podman run -d ghcr.io/utrechtuniversity/src-test-workspace:ubuntu /sbin/init
           podman ps --all
