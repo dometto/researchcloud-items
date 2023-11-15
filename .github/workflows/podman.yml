@@ -24,4 +24,5 @@ jobs:
           CMD [ "/sbin/init" ]
           EOF
           podman build --format=docker -t podmantest .
-          podman run -d --network=host -p 80:80 podmantest
+          podman run -d -p 80:80 podmantest
+          podman ps --all
