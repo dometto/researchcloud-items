@@ -19,7 +19,7 @@ jobs:
           path: "${{ github.repository }}"
       - name: Get changed playbooks
         id: changed-playbooks-yaml
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           path: "${{ github.repository }}"
           quotepath: false
@@ -28,7 +28,7 @@ jobs:
               - 'playbooks/*.yml'
       - name: Get changed roles
         id: changed-roles-yaml
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           path: "${{ github.repository }}"
           dir_names: true
@@ -40,16 +40,15 @@ jobs:
               - 'playbooks/roles/**/**'
       - name: Get changed scenarios
         id: changed-scenarios-yaml
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v40
         with:
           path: "${{ github.repository }}"
           dir_names: true
-          dir_names_max_depth: 2
+          dir_names_max_depth: 3
           dir_names_include_files: true
           quotepath: false
-          files_yaml: |
-            scenarios:
-              - 'molecule/*/*.yml'
+          files: |
+              molecule/*/*.yml
       - id: set-scenario-matrix
         run: |
           ROLES=(${{ steps.changed-roles-yaml.outputs.roles_all_changed_files }})
