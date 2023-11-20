@@ -26,7 +26,7 @@ jobs:
           files_yaml: |
             playbooks:
               - 'playbooks/*.yml'
-      - name: Get changed roles and scenarios
+      - name: Get changed roles
         id: changed-roles-yaml
         uses: tj-actions/changed-files@v39
         with:
@@ -38,8 +38,18 @@ jobs:
           files_yaml: |
             roles:
               - 'playbooks/roles/**/**'
+      - name: Get changed scenarios
+        id: changed-scenarios-yaml
+        uses: tj-actions/changed-files@v39
+        with:
+          path: "${{ github.repository }}"
+          dir_names: true
+          dir_names_max_depth: 2
+          dir_names_include_files: true
+          quotepath: false
+          files_yaml: |
             scenarios:
-              - 'molecule/**/*.yml'
+              - 'molecule/*/*.yml'
       - id: set-scenario-matrix
         run: |
           ROLES=(${{ steps.changed-roles-yaml.outputs.roles_all_changed_files }})
@@ -51,7 +61,7 @@ jobs:
           PLAYBOOKS=("${PLAYBOOKS[@]/#playbooks\//playbook-}") # playbooks/foo.yml -> playbook-foo.yml
           PLAYBOOKS=("${PLAYBOOKS[@]/%.yml/}") # playbook-foo.yml -> playbook-foo
 
-          SCENARIOS=(${{ steps.changed-roles-yaml.outputs.scenarios_all_changed_files }})
+          SCENARIOS=(${{ steps.changed-scenarios-yaml.outputs.scenarios_all_changed_files }})
           echo "DEBUG SCENARIOS: $SCENARIOS"
           SCENARIOS=("${SCENARIOS[@]/#molecule\//}") # molecule/playbook-foo -> playbook-foo
 
