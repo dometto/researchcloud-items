@@ -21,7 +21,6 @@ jobs:
         with:
           dir_names: true
           dir_names_max_depth: 3
-          dir_names_include_files: true
           quotepath: false
           files: |
               playbooks/roles/**/**
@@ -31,12 +30,10 @@ jobs:
         with:
           dir_names: true
           dir_names_max_depth: 2
-          dir_names_include_files: true
           quotepath: false
-          files_yaml: |
-            scenarios:
-              - 'molecule/playbook-*/*.yml'
-              - 'molecule/role-*/*.yml'
+          files: |
+              molecule/playbook-*/*.yml
+              molecule/role-*/*.yml
       - name: Get changed playbooks
         id: changed-playbooks
         uses: tj-actions/changed-files@v40
@@ -56,7 +53,7 @@ jobs:
           PLAYBOOKS=("${PLAYBOOKS[@]/#playbooks\//playbook-}") # playbooks/foo.yml -> playbook-foo.yml
           PLAYBOOKS=("${PLAYBOOKS[@]/%.yml/}") # playbook-foo.yml -> playbook-foo
 
-          SCENARIOS=(${{ steps.changed-scenarios.outputs.scenarios_all_changed_files }})
+          SCENARIOS=(${{ steps.changed-scenarios.outputs.all_changed_files }})
           echo "DEBUG SCENARIOS: $SCENARIOS"
           SCENARIOS=("${SCENARIOS[@]/#molecule\//}") # molecule/playbook-foo -> playbook-foo
 
