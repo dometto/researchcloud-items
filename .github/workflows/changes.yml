@@ -41,19 +41,16 @@ jobs:
       - name: Set matrix based on changed files
         id: set-scenario-matrix
         run: |
-          ROLES=(${roles})
-          echo "DEBUG ROLES: ${ROLES[*]}"
+          ROLES=(${{ steps.changed-roles.outputs.all_changed_files }})
           ROLES=("${ROLES[@]/#playbooks\/roles\//role-}") # playbooks/roles/foo -> role-foo
           echo "DEBUG ROLES: ${ROLES[*]}"
 
           PLAYBOOKS=(${playbooks})
-          echo "DEBUG PLAYBOOKS: ${PLAYBOOKS[*]}"
           PLAYBOOKS=("${PLAYBOOKS[@]/#playbooks\//playbook-}") # playbooks/foo.yml -> playbook-foo.yml
           PLAYBOOKS=("${PLAYBOOKS[@]/%.yml/}") # playbook-foo.yml -> playbook-foo
           echo "DEBUG PLAYBOOKS: ${PLAYBOOKS[*]}"
 
-          SCENARIOS=(${scenarios})
-          echo "DEBUG SCENARIOS: ${SCENARIOS[*]}"
+          SCENARIOS=(${{ steps.changed-scenarios.outputs.all_changed_files }})
           SCENARIOS=("${SCENARIOS[@]/#molecule\//}") # molecule/playbook-foo -> playbook-foo
           echo "DEBUG SCENARIOS: ${SCENARIOS[*]}"
 
