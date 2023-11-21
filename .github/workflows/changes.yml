@@ -26,10 +26,8 @@ jobs:
           files_yaml: |
             roles:
               - 'playbooks/roles/**/**'
-            playbooks:
-              - 'playbooks/*.yml'
             scenarios:
-              - 'molecule/*.yml'
+              - 'molecule/*/*.yml'
 
       - name: Get changed playbooks
         id: changed-files
