@@ -1,0 +1,33 @@
+---
+name: Changes
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  define_scenarios:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get all changed roles
+        id: changed-roles-yaml
+        uses: tj-actions/changed-files@v40
+        with:
+          json: true
+          dir_names: true
+          dir_names_max_depth: 3
+          dir_names_include_files: true
+          quotepath: false
+          files_yaml: |
+            roles:
+              - 'playbooks/roles/**/**'
+            playbooks:
+              - 'playbooks/*.yml'
+            scenarios:
+              - 'molecule/*.yml'
