@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Get all changed roles
-        id: changed-roles-yaml
+        id: changed-files
         uses: tj-actions/changed-files@v40
         with:
           json: true
@@ -31,3 +31,28 @@ jobs:
               - 'playbooks/*.yml'
             scenarios:
               - 'molecule/*.yml'
+      - name: Set matrix based on changed files
+        id: set-scenario-matrix
+        run: |
+          ROLES=(${{ steps.changed-files.outputs.roles_all_changed_files }})
+          echo "DEBUG ROLES: $ROLES"
+          ROLES=("${ROLES[@]/#playbooks\/roles\//role-}") # playbooks/roles/foo -> role-foo
+
+          PLAYBOOKS=(${{ steps.changed-files.outputs.playbooks_all_changed_files }})
+          echo "DEBUG PLAYBOOKS: $PLAYBOOKS"
+          PLAYBOOKS=("${PLAYBOOKS[@]/#playbooks\//playbook-}") # playbooks/foo.yml -> playbook-foo.yml
+          PLAYBOOKS=("${PLAYBOOKS[@]/%.yml/}") # playbook-foo.yml -> playbook-foo
+
+          SCENARIOS=(${{ steps.changed-files.outputs.scenarios_all_changed_files }})
+          echo "DEBUG SCENARIOS: $SCENARIOS"
+          SCENARIOS=("${SCENARIOS[@]/#molecule\//}") # molecule/playbook-foo -> playbook-foo
+
+          ALL_CHANGES="$PLAYBOOKS $ROLES $SCENARIOS"
+          echo "DEBUG ALL_CHANGES: $ALL_CHANGES"
+          # Now construct a unique array out of ALL_CHANGES
+          MATRIX=($(echo "$ALL_CHANGES" | xargs -n 1 | sort -u))
+          # Next create a valid json array out of the bash array using jq
+          MATRIX=$(printf '%s\n' "${MATRIX[@]}" | jq -R . | jq -c -s .)
+          # Store the results
+          echo matrix={\"scenarios\": $MATRIX} >> $GITHUB_OUTPUT
+          echo "DEBUG MATRIX: $MATRIX"
