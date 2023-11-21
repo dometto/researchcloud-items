@@ -32,7 +32,6 @@ jobs:
           files: |
               molecule/playbook-*/*.yml
               molecule/role-*/*.yml
-      - run: echo "${{ steps.changed-scenarios.outputs.all_changed_files }}"
       - name: Get changed playbooks
         id: changed-playbooks
         uses: tj-actions/changed-files@v40
@@ -51,16 +50,21 @@ jobs:
           PLAYBOOKS=("${PLAYBOOKS[@]/#playbooks\//playbook-}") # playbooks/foo.yml -> playbook-foo.yml
           PLAYBOOKS=("${PLAYBOOKS[@]/%.yml/}") # playbook-foo.yml -> playbook-foo
 
+          echo " MYDEBUG ${{ steps.changed-scenarios.outputs.all_changed_files }}"
           SCENARIOS=(${{ steps.changed-scenarios.outputs.all_changed_files }})
           echo "DEBUG SCENARIOS: $SCENARIOS"
           SCENARIOS=("${SCENARIOS[@]/#molecule\//}") # molecule/playbook-foo -> playbook-foo
 
           ALL_CHANGES="$PLAYBOOKS $ROLES $SCENARIOS"
           echo "DEBUG ALL_CHANGES: $ALL_CHANGES"
-          # Now construct a unique array out of ALL_CHANGES
+
+          # Construct a unique bash array out of ALL_CHANGES
           MATRIX=($(echo "$ALL_CHANGES" | xargs -n 1 | sort -u))
-          # Next create a valid json array out of the bash array using jq
+
+          # Create a valid json array out of the bash array using jq
           MATRIX=$(printf '%s\n' "${MATRIX[@]}" | jq -R . | jq -c -s .)
+
           # Store the results
           echo matrix={\"scenarios\": $MATRIX} >> $GITHUB_OUTPUT
-          echo "DEBUG MATRIX: $MATRIX"
+          echo scenarios=$MATRIX >> $GITHUB_OUTPUT
+          echo "DEBUG SCENARIOS: $MATRIX"
