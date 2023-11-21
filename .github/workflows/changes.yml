@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Get all changed roles
-        id: changed-files
+      - name: Get changed roles and scenarios
+        id: changed-dirs
         uses: tj-actions/changed-files@v40
         with:
           dir_names: true
@@ -30,19 +30,27 @@ jobs:
               - 'playbooks/*.yml'
             scenarios:
               - 'molecule/*.yml'
+
+      - name: Get changed playbooks
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          quotepath: false
+          files: |
+              playbooks/*.yml
       - name: Set matrix based on changed files
         id: set-scenario-matrix
         run: |
-          ROLES=(${{ steps.changed-files.outputs.roles_all_changed_files }})
+          ROLES=(${{ steps.changed-dirs.outputs.roles_all_changed_files }})
           echo "DEBUG ROLES: $ROLES"
           ROLES=("${ROLES[@]/#playbooks\/roles\//role-}") # playbooks/roles/foo -> role-foo
 
-          PLAYBOOKS=(${{ steps.changed-files.outputs.playbooks_all_changed_files }})
+          PLAYBOOKS=(${{ steps.changed-files.outputs.all_changed_files }})
           echo "DEBUG PLAYBOOKS: $PLAYBOOKS"
           PLAYBOOKS=("${PLAYBOOKS[@]/#playbooks\//playbook-}") # playbooks/foo.yml -> playbook-foo.yml
           PLAYBOOKS=("${PLAYBOOKS[@]/%.yml/}") # playbook-foo.yml -> playbook-foo
 
-          SCENARIOS=(${{ steps.changed-files.outputs.scenarios_all_changed_files }})
+          SCENARIOS=(${{ steps.changed-dirs.outputs.scenarios_all_changed_files }})
           echo "DEBUG SCENARIOS: $SCENARIOS"
           SCENARIOS=("${SCENARIOS[@]/#molecule\//}") # molecule/playbook-foo -> playbook-foo
 
