@@ -12,8 +12,8 @@ The guideline translates to the following concrete requirements:
 catalog components. Hence these composition items should be documented in the catalog itself.   
 - catalog components merely reference externally held installation scripts. Their "Ansible Playbook" 
 scripts are located elsewhere, in a Git repository (such as this one). The component/playbook documentation should be maintained in 
-that Git repository.  It suffices to have the catalog component document a refererence to the URL of the documentation in the 
-Git repository.  Any other descriptive catalog component information should be derived from the documentation kept in Git.         
+that Git repository. It suffices to have the catalog component document a refererence to the URL of the documentation in the 
+Git repository. Any other descriptive catalog component information should be derived from the documentation kept in Git.
 - Ansible Roles should be documented in the Git repository that lists their source code.
 
 ### Content
@@ -40,15 +40,13 @@ document a playbook
 or the file [template-roles.md](roles/template-roles.md) to document a role.
 
 NB: The files section of roles may include [base64 encoded](icons.md) icon files. 
-These files can be used to decorate a related catalog item in 
-SURF ResearchCloud.
-
+These files can be used to decorate a related catalog item in SURF ResearchCloud.
 
 ## Functionality Scope
 Ansible Playbooks (ResearchCloud components) should be able to run independent of any other Playbooks. This guideline 
 ensures that the Playbook can be reused within the context of different workspace compositions.
 Dependencies should be managed within, and hidden by, the Playbook. For instance a Role referenced in the Playbook
-could list the other Roles that it depends on. 
+could list the other Roles that it depends on.
 
 Note that the installation script specified by a Playbook will run in isolation from other Playbook installation scripts. 
 For instance Ansible variables are scoped to a single ResearchCloud component (Playbook) and their value will not be 
@@ -56,7 +54,6 @@ passed on to the next component Playbook script.
 
 Ansible Roles should follow the principe "doing one thing well".  
 For more information, see [Design Principles](./design_principles.md).
-
 
 ## Interoperability
 Avoid the use of hardcoded constants or literals in installation scripts. 
@@ -72,16 +69,17 @@ Licences should be compatible with licenses for any other software it depends on
 The [Public License Selector](https://ufal.github.io/public-license-selector) is a tool that has been developed as 
 part of a European Research program. It assists you to select an appropriate and compatible license for software and data.
 
-
 ## Support and Maintenance
 A Catalog item/component should be marked either "experimental" or "supported".
-Supported items/components are expected to be actively maintained and proactively checked for any defects on an annual basis 
-or more frequent. They have been tested in use case workspace compositions.
-They must be fully documented according to the specifications in this guideline.
+Supported items/components are expected to be:
+
+- actively maintained
+- proactively checked for any defects through [automated testing](#test-driven-development)
+- fully documented according to the specifications in this guideline
+
 Supported catalog items may not comprise of any catalog components that are experimental.
 
-Unsupported items/components should include a disclaimer to indicate their experimental status. This alerts end users to double-check
-compliance with policies.
+Unsupported items/components should include a disclaimer to indicate their experimental status. This alerts end users to double-check compliance with policies.
 
 ## Security 
 Catalog item documentation should list the responsibilities of users with regard to security.  
@@ -92,12 +90,15 @@ A workspace composition should be compliant with applicable policies. When in do
 workspace type to a specified community/collaboration.
 
 ## Best practices
+
 ### Test-driven development
-While unit tests are not present in these components made for SURF Research Cloud, there are other tools that can help you: [Ansible testing modules](https://docs.ansible.com/ansible/latest/reference_appendices/test_strategies.html), [Ansible Lint](https://ansible-lint.readthedocs.io/en/latest/) and [Ansible Provisioning in Vagrant VMs](https://www.vagrantup.com/docs/provisioning/ansible).
-Try to incorporate as much of TDD into developing playbooks and roles: first determine when your code is succesfull or when it should fail, and then code around those requirements.
+
+Ansible playbooks and roles should be subjected to automated testing. While classical unit testing of code is of course not applicable, there are alternative frameworks for automated testing of infranstructure deployment. [Molecule](https://ansible.readthedocs.io/projects/molecule/) is such a framework for Ansible, and we have opted to use it. However, because of the specific way ResearchCloud works, a specific Molecule setup is required that is explained [here](https://github.com/UtrechtUniversity/SRC-molecule). Also see guidelines to what constitutes [sensible testing](https://github.com/UtrechtUniversity/SRC-molecule#adding-additional-assertions) for ResearchCloud components. Try to incorporate  as much of the Test-driven Development paradigm as possible.
+
+Molecule tests for playbooks and roles are kept within the same repository as the source code, while the tests for catalog items are kept in a [separate repository](https://github.com/UtrechtUniversity/SRC-catalog-items) and are run periodically.
 
 ### Specific roles
-Reuse the roles defined inside this repository for certain tasks, instead of doing it yourself. Especially for SURF Research Cloud, these roles come in handy:
+Reuse the roles defined inside this repository for certain tasks, instead of doing it yourself. Especially for SURF Research Cloud, these roles may come in handy:
 
 - Use [runonce](roles/runonce.md) to have a piece of code ran once the first time a user logs in.
 - Use [desktop_file](roles/desktop_file.md) to create menu and desktop entries.
