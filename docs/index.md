@@ -18,21 +18,25 @@ document a playbook
 or the file [template-roles.md](roles/template-roles.md) to document a role.
 
 ## Playbooks
+
 The status of a playbook is either Experimental or Supported. In the SURF Research Cloud catalog, this
 status should be indicated in the description field of the catalog plugin item.
 
 ### Supported playbooks:   
-("Status: Supported")    
 
-Currently, all our playbooks are still considered Experimental. 
+**Status: supported.**
 
-
-### Experimental playbooks:   
-("Status: Experimental, use with caution")     
-- [anaconda](playbooks/anaconda.md)  python data science development
 - [aptly](playbooks/aptly.md) serve apt repositories on the workspace
-- [asreview](playbooks/asreview.md)  machine-learning powered application for systematic reviews
-- [camunda](playbooks/camunda.md)  a business process workflow suite
+- [python-workbench](playbooks/python-workbench.md) Python application development
+- [security_updates](playbooks/security_updates.md) automatic updates for Ubuntu workspaces
+
+### Experimental playbooks:
+
+**Status: Experimental. Use with caution.**
+
+- [anaconda](playbooks/anaconda.md) python data science development
+- [asreview](playbooks/asreview.md) machine-learning powered application for systematic reviews
+- [camunda](playbooks/camunda.md) a business process workflow suite
 - [camunda-modeler](playbooks/camunda-modeler.md)  part of the camunda suite
 - [docker](playbooks/docker.md) application container management
 - [ephor](playbooks/ephor.md) selected roles for ephor use-case
@@ -40,13 +44,10 @@ Currently, all our playbooks are still considered Experimental.
 - [irods-desktop](playbooks/irods-desktop.md) desktop application tools for iRODS data grid
 - [keycloak](playbooks/keycloak.md)  OpenIDConnect/SAML Server
 - [matlab](playbooks/matlab.md) Data analysis and simulation suite
-- [miniconda-base](playbooks/miniconda-base.md)   Python application development
-- [miniconda](playbooks/miniconda.md)  Python applicaiton development
-- [python-workbench](playbooks/python-workbench.md)  Python application development
-- [security_updates](playbooks/security_updates.md)  automatic updates for Ubuntu
+- [miniconda-base](playbooks/miniconda-base.md) Python application development
+- [miniconda](playbooks/miniconda.md)  Python application development
 - [robotuser](playbooks/robotuser.md) agent used for remote filesystem mounts   
 - [transferuser](playbooks/transferuser.md) dedicated user for file exchange with remote host
-
 
 ## Roles
 - [anaconda](roles/anaconda.md)
@@ -54,6 +55,7 @@ Currently, all our playbooks are still considered Experimental.
 - [asreview](roles/asreview.md)
 - [camunda-modeler](roles/camunda-modeler.md)
 - [camunda-server](roles/camunda-server.md)
+- [default_group](roles/default_group.md)
 - [desktop-file](roles/desktop_file.md)
 - [docker](roles/docker.md)
 - [fact_regular_users](roles/fact_regular_users.md)
@@ -78,6 +80,7 @@ Currently, all our playbooks are still considered Experimental.
 - [rstudio](roles/rstudio.md)
 - [runonce](roles/runonce.md)
 - [security_updates](roles/security_updates.md)
+- [set_gid](roles/set_gid.md)
 - [sshfs-configrobot](roles/sshfs-configrobot.md)
 - [sshfs-mount](roles/sshfs-mount.md)
 - [sshfs-umount](roles/sshfs-umount.md)   
