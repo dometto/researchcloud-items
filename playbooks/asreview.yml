@@ -3,5 +3,12 @@
   hosts: localhost
   gather_facts: true
   roles:
-    - asreview
+    - role: asreview
+    - role: nginx-reverse_proxy
+      vars:
+        nginx_reverse_proxy_locations:
+          - name: asreview
+            location: /
+            backend: http://localhost:5000
+            auth: sram
 ...

@@ -1,0 +1,31 @@
+---
+platforms:
+  - name: workspace-src-ubuntu_jammy
+    image: ghcr.io/utrechtuniversity/src-test-workspace:ubuntu_jammy
+    command: /sbin/init
+    pre_build_image: true
+    published_ports:
+      - 80/tcp
+    registry:
+      url: $DOCKER_REGISTRY
+      credentials:
+        username: $DOCKER_USER
+        password: $DOCKER_PW
+provisioner:
+  name: ansible
+  env:
+    components:
+      - name: nginx
+        git: https://gitlab.com/dometto/plugin-nginx.git
+        version: molecule_compatibility
+        path: plugin-nginx.yml
+        parameters:
+          rsc_nginx_authorization_endpoint: http://localhost
+          rsc_nginx_user_info_endpoint: http://localhost
+          rsc_nginx_service_url: http://localhost
+          nginx_enable_ssl: false
+          nginx_enable_auth: true
+          rsc_nginx_oauth2_application:
+            client_id: foo
+      - name: asreview
+        path: asreview.yml
