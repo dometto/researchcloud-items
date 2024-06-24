@@ -28,7 +28,7 @@
 - name: Create htpasswd files based on nginx_reverse_proxy_auth_info
   when: nginx_reverse_proxy_auth_info | default('') | length > 0
   with_items: "{{ nginx_reverse_proxy_auth_info }}"
-  no_log: true
+  #no_log: true
   htpasswd:
     path: "{{ htpasswd_location }}/{{ item.name }}"
     name: "{{ item.username }}"
@@ -43,7 +43,7 @@
 
 - name: Create htpasswd files with default username and password for all locations not defined in nginx_reverse_proxy_auth_info
   with_items: "{{ _remaining_htpasswd_files }}"
-  no_log: true
+  #no_log: true
   htpasswd:
     path: "{{ htpasswd_location }}/{{ item }}"
     name: "{{ nginx_reverse_proxy_default_username }}"
