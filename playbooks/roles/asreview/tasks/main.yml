@@ -1,14 +1,13 @@
 ---
 - name: Ensure virtualenv is installed
-  pip:
-    name: virtualenv
+  package:
+    name: python3-virtualenv
     state: present
 
 - name: Install ASReview LAB through pip
   pip:
-    name: asreview[all]
+    name: asreview
     virtualenv: "{{ venv_location }}"
-    virtualenv_command: virtualenv
 
 - name: Install systemd template
   template:
